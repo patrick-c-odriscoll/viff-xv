@@ -117,11 +117,11 @@ class viff():
       self.dt = np.dtype(np.uint16)
     elif self.DataStorageType == 4: # uint32
       self.dt = np.dtype(np.uint32)
-    elif self.DataStorageType == 5: # int
+    elif self.DataStorageType == 5: # float
       self.dt = np.dtype(np.single)
-    elif self.DataStorageType == 6: # uint
+    elif self.DataStorageType == 6: # complex
       self.dt = np.dtype(np.csingle)
-    elif self.DataStorageType == 9: # complex
+    elif self.DataStorageType == 9: # double
       self.dt = np.dtype(np.double)
     elif self.DataStorageType == 10:# double complex
       self.dt = np.dtype(np.cdouble)
@@ -179,13 +179,22 @@ class viff():
     f.write(b'\x00\x00\x00\x00')           # LocationDim
     f.write(np.uint32(self.data.shape[0])) # NumberOfImages
     f.write(np.uint32(self.data.shape[1])) # NumberOfBands
-    # TODO: finish DataStorageType
-    if   self.data.dtype == 'byte':        # DataStorageType
+    if   self.data.dtype == 'int8':        # DataStorageType
       f.write(np.uint32(1)) 
-    elif self.data.dtype == 'ubyte':
-      f.write(np.uint32(1))
+    elif self.data.dtype == 'int16':
+      f.write(np.uint32(2))
+    elif self.data.dtype == 'int32':
+      f.write(np.uint32(4))
     elif self.data.dtype == 'float32':
       f.write(np.uint32(5))
+    elif self.data.dtype == 'complex64':
+      f.write(np.uint32(6))
+    elif self.data.dtype == 'flaot64':
+      f.write(np.uint32(9))
+    elif self.data.dtype == 'complex128':
+      f.write(np.uint32(10))
+    else:
+      print('viff: warning unkown data type: '+self.data.dtype)
     f.write(np.uint32(0))                  # DataEncodingScheme
     f.write(np.uint32(0))                  # MapScheme
     f.write(np.uint32(1))                  # MapStorageType
@@ -200,7 +209,7 @@ class viff():
     f.write(np.uint32(0))                  # FSpare1
     f.write(np.uint32(0))                  # FSpare2
     f.write(b'\x00'*404)                   # Reserve
-    f.write(self.data) # TODO: update to make this more rigorous 
+    f.write(self.data)
     f.close()
     return
   
