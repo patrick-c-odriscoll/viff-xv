@@ -95,21 +95,25 @@ class viffFile():
     if   self.DataStorageType == 0: # bit
       assert True, 'viffFile: '+self.filename+' unsuported bit format'
     elif self.DataStorageType == 1: # uint8
-      self.dtype = np.uint8
+      self.dt = np.dtype(np.uint8)
     elif self.DataStorageType == 2: # uint16
-      self.dtype = np.uint16
+      self.dt = np.dtype(np.uint16)
     elif self.DataStorageType == 4: # uint32
-      self.dtype = np.uint32
+      self.dt = np.dtype(np.uint32)
     elif self.DataStorageType == 5: # int
-      self.dtype = np.single
+      self.dt = np.dtype(np.single)
     elif self.DataStorageType == 6: # uint
-      self.dtype = np.csingle
+      self.dt = np.dtype(np.csingle)
     elif self.DataStorageType == 9: # complex
-      self.dtype = np.double
+      self.dt = np.dtype(np.double)
     elif self.DataStorageType == 10:# double complex
-      self.dtype = np.cdouble
+      self.dt = np.dtype(np.cdouble)
     else:
       assert True, 'viffFile: '+self.filename+' unkown type format: '+self.DataStorageType
+    if self.endianness == 'little':
+      self.dt.newbyteorder('L')
+    elif self.endianness == 'big':
+      self.dt.newbyteorder('B')
     self.DataEncodingScheme = f.read(4)
     self.MapScheme = f.read(4)
     self.MapStorageType = f.read(4)
@@ -125,13 +129,59 @@ class viffFile():
     self.FSpare2 = f.read(4)
     self.Reserve = f.read(404)
     buffer = f.read()
-    self.data = np.reshape(np.frombuffer(buffer,dtype=self.dtype),
+    self.data = np.reshape(np.frombuffer(buffer,dtype=self.dt),
                           (self.NumberOfImages,self.NumberOfBands,self.NumberOfColumns,self.NumberOfRows))
-    print(self.data.shape)
     f.close()
     return
   
   def write(self,filename):
+    f = open(filename,'wb')
+    f.write(b'\xab')                       # FileId
+    f.write(b'\x01')                       # FileType
+    f.write(b'\x01')                       # Release
+    f.write(b'\x00')                       # Version
+    if sys.byteorder == 'little':          # MachineDep
+      f.write(b'\x08')
+    elif sys.byteorder == 'big':
+      f.write(b'\x02')
+    else:
+      print('viffFile: unkown endianness')
+    f.write(b'\x00\x00\x00')               # Padding
+    f.write(b'\x00'*512)                   # Comment
+    f.write(np.uint32(self.data.shape[3])) # NumberOfRows
+    f.write(np.uint32(self.data.shape[2])) # NumberOfColumns
+    f.write(np.uint32(0.0))                # LengthOfSubrow
+    f.write(b'\xff\xff\xff\xff')           # StartX
+    f.write(b'\xff\xff\xff\xff')           # StartY
+    f.write(b'\x00\x00\x80\x3f')           # XPixelSize
+    f.write(b'\x00\x00\x80\x3f')           # YPixelSize
+    f.write(b'\x01\x00\x00\x00')           # LocationType
+    f.write(b'\x00\x00\x00\x00')           # LocationDim
+    f.write(np.uint32(self.data.shape[0])) # NumberOfImages
+    f.write(np.uint32(self.data.shape[1])) # NumberOfBands
+    # TODO finish DataStorageType
+    if   self.data.dtype == 'byte':        # DataStorageType
+      f.write(np.uint32(1)) 
+    elif self.data.dtype == 'ubyte':
+      f.write(np.uint32(1))
+    elif self.data.dtype == 'float32':
+      f.write(np.uint32(5))
+    f.write(np.uint32(0))                  # DataEncodingScheme
+    f.write(np.uint32(0))                  # MapScheme
+    f.write(np.uint32(1))                  # MapStorageType
+    f.write(np.uint32(0))                  # MapRowSize
+    f.write(np.uint32(0))                  # MapColumnSize
+    f.write(np.uint32(0))                  # MapSubrowSize
+    f.write(np.uint32(0))                  # MapEnable
+    f.write(np.uint32(0))                  # MapsPerCycle
+    f.write(np.uint32(0))                  # ColorSpaceModel
+    f.write(np.uint32(0))                  # ISpare1
+    f.write(np.uint32(0))                  # ISpare2
+    f.write(np.uint32(0))                  # FSpare1
+    f.write(np.uint32(0))                  # FSpare2
+    f.write(b'\x00'*404)                   # Reserve
+    f.write(self.data)
+    f.close()
     return
   
 
