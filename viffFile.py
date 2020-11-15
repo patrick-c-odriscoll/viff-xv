@@ -1,5 +1,6 @@
 import sys, argparse
 import numpy as np
+import matplotlib.pyplot as plt
 
 '''
   Objectives:
@@ -125,7 +126,7 @@ class viffFile():
     self.Reserve = f.read(404)
     buffer = f.read()
     self.data = np.reshape(np.frombuffer(buffer,dtype=self.dtype),
-                          (self.NumberOfImages,self.NumberOfRows,self.NumberOfColumns,self.NumberOfBands))
+                          (self.NumberOfImages,self.NumberOfBands,self.NumberOfColumns,self.NumberOfRows))
     print(self.data.shape)
     f.close()
     return
@@ -141,3 +142,6 @@ if __name__ == "__main__":
   args = parser.parse_args()
 
   test = viffFile(args.file)
+
+  plt.imshow(test.data[0,0,:,:])
+  plt.show()
