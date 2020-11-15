@@ -1,6 +1,5 @@
-import sys, argparse
+import sys
 import numpy as np
-import matplotlib.pyplot as plt
 
 class viff():
   """ Viff File reader and writer
@@ -207,12 +206,20 @@ class viff():
   
 
 if __name__ == "__main__":
+  import matplotlib.pyplot as plt
+  import argparse
   """ Demonstration """
   parser = argparse.ArgumentParser(description='viff reader example')
   parser.add_argument('--file', type=str, help='filename (default=None)')
   args = parser.parse_args()
 
-  test = viff(args.file)
+  """ Read a file by initializing the class """
+  test1 = viff(args.file)
 
-  plt.imshow(test.data[0,0,:,:])
+  plt.imshow(test1.data[0,0,:,:])
   plt.show()
+
+  """ Write a new file by class initialization """
+  # test2 = viff('testing.xv',test1.data)
+  """ Write a new file recycling the test1 class """
+  # test1.write('testing.xv')
