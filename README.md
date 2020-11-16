@@ -1,5 +1,5 @@
 # viff-xv
-Reader of viff and xv from old Khoros and Visiquest formats.
+Read and write old Khoros/VisiQuest viff and xv formats.
 
 ## Requirements
 * Python 3.7
