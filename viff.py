@@ -1,6 +1,14 @@
 import sys
 import numpy as np
 
+__author__ = "Patrick C O\'Driscoll"
+__copyright__ = "2020"
+__credits__ = ["Patrick C O\'Driscoll"]
+__license__ = "MIT"
+__version__ = "0.0.0"
+__maintainer__ = "Patrick C O\'Driscoll"
+__email__ = "patrick.c.odriscoll@gmail.com"
+
 class viff():
   """ Viff File reader and writer
     A viff or xv file is from Khoros/VisiQuest packages which has a header of
