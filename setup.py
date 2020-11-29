@@ -3,8 +3,7 @@ import viff
 
 long_description = open('README.md').read()
 
-REQUIREMENTS = ['numpy',
-                'sys']
+REQUIREMENTS = ['numpy']
 
 CLASSIFIERS = ['Development Status :: 4 - Beta',
                'Intended Audience :: Developers',
