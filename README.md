@@ -1,5 +1,5 @@
 # viff-xv
-Read and write old Khoros/VisiQuest viff and xv formats.
+A viff or xv file is from Khoros/VisiQuest packages which has a header of 1024 bytes and is BSQ formated raw raster file. The file is parsed based upon the C struct definition provided in the source section.
 
 ## Requirements
 * Python 3.7
@@ -7,41 +7,48 @@ Read and write old Khoros/VisiQuest viff and xv formats.
 
 ## Features and I/O
 ### Read
-
+```
+data = viff.read(filename: str)
+```
 ### Write
+```
+viff.write(filename: str, data: np.array)
+```
+### Variable Description
+* filenames (str) - Path to the input file to read
+* data (np.array) - data to save formated as np.array with dimensions [NumberOfImages,NumberOfBands,NumberOfColumns,NumberOfRows]
 
 ## Code Example
 ### Read and Display File
-Read and create an image showing the 0th band of the image.
+Read and display the first image and band of the read in file.
 ```
+import viff
 import matplotlib.pyplot as plt
 import argparse
+
 parser = argparse.ArgumentParser(description='viff reader example')
 parser.add_argument('--file', type=str, help='filename (default=None)')
 parser.add_argument('--save', action='store_true', help='save a copy as testing.xv')
 args = parser.parse_args()
 
-""" Read a file by initializing the class """
-test1 = viff(args.file)
+""" Read a file """
+data = viff.read(args.file)
 
-plt.imshow(test1.data[0,0,:,:])
+plt.imshow(data[0,0,:,:])
 plt.show()
 ```
 ### Write a new file
 ```
 if args.save:
-  """ Write a new file recycling the test1 class """
-  test1.write('testing.xv')
-  """ Write a new file by class initialization """
-  test2 = viff('testing.xv',test1.data)
+  """ Write a new file """
+  viff.write('testing.xv',data)
 ```
 ### Command line usage
 ```
 $ python viff.py --file <filename> --save
 ```
-This generates a plot and a new file 'testing.xv' two times. This can be read in 
+This generates a plot and a new file 'testing.xv'.
+
 ## Sources:
 ### File Format
 http://www.fileformat.info/format/viff/egff.htm
-### Image Used in this Readme is from
-O'Driscoll, Patrick. "Self-Organizing Maps for Segmentation of fMRI: Understanding the Genesis of Willed Movement Through A Multiple Subject Study." (2018) Diss., Rice University. https://hdl.handle.net/1911/105789.
