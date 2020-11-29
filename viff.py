@@ -5,7 +5,7 @@ __author__ = "Patrick C O\'Driscoll"
 __copyright__ = "2020 Patrick C O\'Driscoll"
 __credits__ = ["Patrick C O\'Driscoll"]
 __license__ = "MIT"
-__version__ = "0.0.2"
+__version__ = "0.0.1"
 __maintainer__ = "Patrick C O\'Driscoll"
 __email__ = "patrick.c.odriscoll@gmail.com"
 

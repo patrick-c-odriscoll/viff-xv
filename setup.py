@@ -10,7 +10,7 @@ CLASSIFIERS = ['Development Status :: 4 - Beta',
                'License :: OSI Approved :: MIT License',
                'Programming Language :: Python :: 3 :: Only']
 
-setup(name='viff',
+setup(name='viffIO',
       version=viff.__version__,
       description='Read and write old Khoros/VisiQuest viff and xv formats',
       long_description=long_description,

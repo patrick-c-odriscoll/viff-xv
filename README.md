@@ -1,4 +1,4 @@
-# viff-xv
+# viffIO
 A viff or xv file is from Khoros/VisiQuest packages which has a header of 1024 bytes and is BSQ formated raw raster file. The file is parsed based upon the C struct definition provided in the source section.
 
 ## Requirements
@@ -50,5 +50,4 @@ $ python viff.py --file <filename> --save
 This generates a plot and a new file 'testing.xv'.
 
 ## Sources:
-### File Format
 http://www.fileformat.info/format/viff/egff.htm
